@@ -1,0 +1,204 @@
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+
+const TestimonialWrapper = styled.section`
+  padding: 3rem 1.5rem;
+  background-color: #ffffff;
+  position: relative;
+  text-align: center;
+`;
+
+const TestimonialSubtitle = styled.p`
+  font-size: 1rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+`;
+
+const TestimonialTitle = styled.h2`
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 3rem;
+`;
+
+const TestimonialCarousel = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+`;
+
+const TestimonialSlider = styled.div`
+  display: flex;
+  transition: transform 0.5s ease;
+  width: 100%;
+  overflow: hidden;
+`;
+
+const TestimonialCard = styled.div`
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  position: relative;
+  flex: 0 0 calc(33.333% - 2rem);
+  margin: 0 1rem;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #4ade80, #3b82f6, #a855f7);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+`;
+
+const Stars = styled.div`
+  color: #fbbf24;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+`;
+
+const TestimonialText = styled.p`
+  font-size: 1rem;
+  color: #4b5563;
+  margin-bottom: 1.5rem;
+`;
+
+const AuthorInfo = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const AuthorImage = styled.img`
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin-right: 1rem;
+`;
+
+const AuthorName = styled.p`
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+`;
+
+const AuthorRole = styled.p`
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+`;
+
+const CarouselButton = styled.button`
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+
+  &:hover {
+    background-color: #f3f4f6;
+  }
+
+  &.prev {
+    left: -20px;
+  }
+
+  &.next {
+    right: -20px;
+  }
+`;
+
+const CheckReviewsLink = styled.a`
+  display: inline-block;
+  margin-top: 2rem;
+  color: #3b82f6;
+  font-weight: 600;
+  text-decoration: underline;
+`;
+
+function TestimonialSection() {
+  const testimonials = [
+    {
+      text: "You made it so simple. My new site is so much faster and easier to work with than my old site. I just choose the page, make the change.",
+      author: "Leslie Alexander",
+      role: "Freelance React Developer",
+      image: "path_to_leslie_image.jpg"
+    },
+    {
+      text: "Simply the best. Better than all the rest. I'd recommend this product to beginners and advanced users.",
+      author: "Jacob Jones",
+      role: "Digital Marketer",
+      image: "path_to_jacob_image.jpg"
+    },
+    {
+      text: "I cannot believe that I have got a brand new landing page after getting Omega. It was super easy to edit and publish.",
+      author: "Jenny Wilson",
+      role: "Graphic Designer",
+      image: "path_to_jenny_image.jpg"
+    },
+    // Add more testimonials here
+  ];
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const nextSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length);
+  };
+
+  useEffect(() => {
+    const interval = setInterval(nextSlide, 5000); // Auto-slide every 5 seconds
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <TestimonialWrapper>
+      <TestimonialSubtitle>2,157 people have said how good Rareblocks</TestimonialSubtitle>
+      <TestimonialTitle>Our happy clients say about us</TestimonialTitle>
+      
+      <TestimonialCarousel>
+        <CarouselButton className="prev" onClick={prevSlide}>&lt;</CarouselButton>
+        <TestimonialSlider style={{ transform: `translateX(-${currentIndex * 33.333}%)` }}>
+          {testimonials.concat(testimonials.slice(0, 2)).map((testimonial, index) => (
+            <TestimonialCard key={index}>
+              <Stars>★★★★★</Stars>
+              <TestimonialText>"{testimonial.text}"</TestimonialText>
+              <AuthorInfo>
+                <AuthorImage src={testimonial.image} alt={testimonial.author} />
+                <div>
+                  <AuthorName>{testimonial.author}</AuthorName>
+                  <AuthorRole>{testimonial.role}</AuthorRole>
+                </div>
+              </AuthorInfo>
+            </TestimonialCard>
+          ))}
+        </TestimonialSlider>
+        <CarouselButton className="next" onClick={nextSlide}>&gt;</CarouselButton>
+      </TestimonialCarousel>
+      
+      <CheckReviewsLink href="#">Check all 2,157 reviews</CheckReviewsLink>
+    </TestimonialWrapper>
+  );
+}
+
+export default TestimonialSection;
